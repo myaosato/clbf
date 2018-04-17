@@ -1,5 +1,5 @@
 (uiop/package:define-package :clbf/clbf (:nicknames) (:use :cl) (:shadow)
-                             (:export :bf) (:intern))
+                             (:export :bf-with-in :bf-cli) (:intern))
 (in-package :clbf/clbf)
 ;;don't edit above
 
@@ -74,16 +74,24 @@
   (if (/= (aref *array* *data-pointer*) 0)
       (find-while)))
    
-(defun bf (argv)
-  (bf-load-program-from-file (first argv))
+(defun bf-core (&key (in-stream *standard-input*) (out-stream *standard-output*))
   (do ((op (read-bf-program) (read-bf-program)))
       ((null op) t)
     (cond ((char= op #\>) (bf-op->))
           ((char= op #\<) (bf-op-<))
           ((char= op #\+) (bf-op-+))
           ((char= op #\-) (bf-op--))
-          ((char= op #\.) (bf-op-out))
-          ((char= op #\,) (bf-op-in))
+          ((char= op #\.) (bf-op-out out-stream))
+          ((char= op #\,) (bf-op-in in-stream))
           ((char= op #\[) (bf-op-while))
           ((char= op #\]) (bf-op-end)))
     (incf *instruction-pointer*)))
+
+(defun bf-cli (argv)
+  (bf-load-program-from-file (first argv))
+  (bf-core))
+
+(defun bf-with-in (stream &key (in-stream *standard-input*) (out-stream *standard-output*))
+  (bf-load-program stream)
+  (bf-core :in-stream in-stream :out-stream out-stream))
+
