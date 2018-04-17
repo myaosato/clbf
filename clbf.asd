@@ -1,4 +1,4 @@
 ;;don't edit
-(DEFSYSTEM "clbf" :DEPENDS-ON (:CL-PPCRE) :AUTHOR "Satoaki Miyao" :LICENSE
- "MIT" :CLASS :PACKAGE-INFERRED-SYSTEM :COMPONENTS
- ((:FILE "2bf") (:FILE "clbf")) :MAILTO "tetu60u@yahoo.co.jp")
+(DEFSYSTEM "clbf" :AUTHOR "Satoaki Miyao" :LICENSE
+ "MIT" :CLASS :PACKAGE-INFERRED-SYSTEM :DEPENDS-ON
+  (:CL-PPCRE "clbf/2bf" "clbf/clbf") :MAILTO "tetu60u@yahoo.co.jp")

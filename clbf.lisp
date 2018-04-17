@@ -61,10 +61,10 @@
   (decf (aref *array* *data-pointer*)))
 
 (defun bf-op-out (&optional (stream *standard-output*)) 
-  (write-byte (aref *array* *data-pointer*) stream))
+  (write-char (code-char (aref *array* *data-pointer*)) stream))
 
 (defun bf-op-in (&optional (stream *standard-input*)) 
-  (setf (aref *array* *data-pointer*) stream))
+  (setf (aref *array* *data-pointer*) (char-code (read-char stream))))
 
 (defun bf-op-while ()
   (if (= (aref *array* *data-pointer*) 0)
