@@ -8,7 +8,13 @@
 (defvar *data-pointer* 0)
 
 (defvar *bf-operators* (list #\> #\< #\+ #\- #\. #\, #\[ #\]))
-(defvar *bf-program* )
+(defvar *bf-program*)
+
+(defun clear-vars ()
+  (setf *instruction-pointer* 0)
+  (setf *array* (make-array '(30000) :element-type '(unsigned-byte 8) :initial-element 0))
+  (setf *data-pointer* 0)
+  (setf *bf-program* nil))
 
 (defun is-bf-op (char)
   (find char *bf-operators*))
@@ -88,8 +94,13 @@
     (incf *instruction-pointer*)))
 
 (defun bf-cli (argv)
-  (bf-load-program-from-file (first argv))
-  (bf-core))
+  (etypecase argv
+    (list
+     (bf-cli (first argv)))
+    ((or string pathname)
+     (bf-load-program-from-file argv)
+     (bf-core)
+     (clear-vars))))
 
 (defun bf-with-in (stream &key (in-stream *standard-input*) (out-stream *standard-output*))
   (bf-load-program stream)
